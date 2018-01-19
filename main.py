@@ -74,25 +74,37 @@ class Discord():
 		r = requests.post(self.url, headers = self.headers, data = message)
 		log('Infos sent successfully') if(r.status_code == 200) else log("Can't send infos")
 		# Need to add an alert in case if it can't send the infos anymore, like contact channel owner...
+		
+	def encode(self,content):
+		ret = content.encode('ascii','ignore')
+		ret = json.loads(ret)
+		return ret 
+
+
+
+	def top(self,content):
+		message = """
+-------------------------⏰ """ + datetime.datetime.now().strftime("%H:%M:%S") + """ ⏰-------------------------"""
+		message += """
+--------------------------------------------------------------------
+Rank | Name | Price | Change(1h) | Change(24h) | Change(7d)
+--------------------------------------------------------------------
+		"""
+		for i in content:
+			message += """
+{}    |    {}    |    {}    |    {}    |    {}    |    {}
+			""".format(i['rank'],i['symbol'],i['price_usd'][:6]+" $",i['percent_change_1h']+" %",i['percent_change_24h']+" %",i['percent_change_7d']+" %")
+		return message
+
+
+
 
 if __name__ == "__main__":
 	CMC = CMC()
 	D = Discord()
 	while True:
-		message = """
---------------------------------------------------------------------
-Rank | Name | Price | Change(1h) | Change(24h) | Change(7d)
---------------------------------------------------------------------
-		"""
 		r = CMC.scrape(params)
-		#D.send("TESTING")
-		r = r.encode('ascii','ignore')
-		rjson = json.loads(r)
-		for i in rjson:
-			message += """
-{}    |    {}    |    {}    |    {}    |    {}    |    {}
-			""".format(i['rank'],i['symbol'],i['price_usd'][:6]+" $",i['percent_change_1h']+" %",i['percent_change_24h']+" %",i['percent_change_7d']+" %")
-		print(message)
+		r = D.encode(r) # Getting value returned by CMC in JSON format 
+		message = D.top(r) # Formating the message in TOP format 
 		D.send(message)
 		time.sleep(600)
-
