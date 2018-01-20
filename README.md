@@ -1,6 +1,6 @@
 # Crypto2discord
 
-Simple Python script using both CoinMarketCap and Discord API to alert user of current market.
+Simple Python 2.7 script using both CoinMarketCap and Discord API to alert user of current market.
 
 1. Input your default channel ID (Get it by activating Discord Dev Mode)
 2. Input your bot token, please follow the instructions on how to get it on Discord API Docs. 
