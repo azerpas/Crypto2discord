@@ -7,22 +7,26 @@ Simple Python 2.7 script using both CoinMarketCap and Discord API to alert user 
 3. Input your params. The two methods that use the bot are explained below. 
 
 
-#### As of 19/01/2017
+#### As of 19/01/2018
 
 The bot supports 2 methods: 
 - Sending a top-list to discord server based.
 - Getting stats of a specific currency.
 + Added Mobile Alert Syntax, to get infos without getting to Discord and just by looking at the notification.
 
-#### As of 30/01/2017
+#### As of 30/01/2018
 - Added ICO support (thanks to ICObench) 
-- Sending alerts every 4 days (can be changed easily) 
+- Sending alerts every 4 days (can be change easily) 
+
+#### As of 31/01/2018
+- Added Crypto News support (thanks to newsapi.org)
+- Sending news every days (can be change easily)
 
 ## TO DO:
 
 - A bit of AI.
 - Input a list of coins to get specific alerts.
-- Crypto-News.
+- ~~Crypto-News.~~
 - ~~ICO news.~~
 - Low Market Cap currencies getting pumped.
 - Monitoring % in 1h 24h and 7d times to define trends.
