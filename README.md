@@ -23,7 +23,7 @@ The bot supports 2 methods:
 - A bit of AI.
 - Input a list of coins to get specific alerts.
 - Crypto-News.
-~~- ICO news.~~
+- ~~ICO news.~~
 - Low Market Cap currencies getting pumped.
 - Monitoring % in 1h 24h and 7d times to define trends.
 
