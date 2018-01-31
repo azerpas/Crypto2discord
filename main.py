@@ -5,10 +5,15 @@ s = requests.session()
 
 channelID = 0 # INPUT YOUR DEFAULT CHANNEL ID
 
+channels = [] # [{''}]
+
+s = requests.session()
+
+channelID = 0 # INPUT YOUR DEFAULT CHANNEL ID
+
 #channels = [] # [{''}]
 
 botToken = '' # INPUT YOUR BOT TOKEN
-
 
 # DEFAULT PARAMS - CHANGE THEM IF NEEDED
 params = {
@@ -26,7 +31,9 @@ params = {
 	# Mobile syntax alert activated ?
 	'mobile':{'activated':False,'specific_channel':True,'channel_id':""},
 
-	'ico':{'channel_id':''} # INPUT YOUR 'SPECIFIC' CHANNEL ID FOR ICO ALERT
+	'ico':{'channel_id':''}, # INPUT YOUR 'SPECIFIC' CHANNEL ID FOR ICO ALERT
+
+	'news':{'channel_id':'','token':''}, # INPUT YOUR 'SPECIFIC' CHANNEL ID FOR NEWS ALERT ####### REQUIRES A NEWSAPI.ORG API ACCOUNT
 
 }
 
@@ -73,6 +80,7 @@ class Discord():
 		self.url = "https://discordapp.com/api/channels/{}/messages".format(self.default_channel)
 		self.url_mobile = "https://discordapp.com/api/channels/{}/messages".format(params['mobile']['channel_id'])
 		self.url_ico = "https://discordapp.com/api/channels/{}/messages".format(params['ico']['channel_id'])
+		self.url_news = "https://discordapp.com/api/channels/{}/messages".format(params['news']['channel_id'])
 
 
 	def send(self,content,channel):
@@ -188,19 +196,60 @@ class ico():
 		return message
 
 
+class news():
+	def __init__(self):
+		self.s = requests.session()
+		self.token = params['news']['token']
+		self.url = "https://newsapi.org/v2/top-headlines?sources=crypto-coins-news&apiKey="
+		self.req = ""
+		self.paper = []
 
+	def scrape(self):
+		self.req = json.loads(self.s.get(url+token).text)
+		message = []
+		for i in self.req['articles']:
+			message.append({'title':i['title'],'url':i['url']})
+		self.paper = message
+
+	def syntax(self):
+		message = []
+		for i in self.paper:
+			message.append("\n\n{}\nLien: {}\n----------------\n".format(i['title'],i['url']))
+		return message
 
 if __name__ == "__main__":
 	CMC = CMC()
 	D = Discord()
 	I = ico()
+	N = news()
 	count = 0
+	countN = 0
 	while True:
 		r = CMC.scrape(params)
+		#D.send("TESTING")
 		r = D.encode(r)
 		TOPmessage = D.top(r)
 		MOBmessage = D.mobile_notif(r)
 		D.send(TOPmessage,D.url)
+
+		#### NEWS ####
+		if countN == 0:
+			N.scrape()
+			D.send("📝 " + datetime.datetime.now().strftime("%A %d %B") + " 📝" + "\n📝 LAST NEWS 📝\n")
+			NEWSmessage = N.syntax()
+			for i in NEWSmessage:
+				D.send(i,D.url_news)
+		if countN == 72:
+			N.scrape()
+			D.send("📝 " + datetime.datetime.now().strftime("%A %d %B") + " 📝" + "\n📝 LAST NEWS 📝\n")
+			NEWSmessage = N.syntax()
+			for i in NEWSmessage:
+				D.send(i,D.url_news)
+			countN = 1
+		countN += 1
+		#### NEWS ####
+
+		#### ICO ####
 		if count == 0:
 			I.scrape()
 			ICOmessage = I.syntax()
@@ -216,6 +265,7 @@ if __name__ == "__main__":
 			for i in ICOmessage:
 				D.send(i,D.url_ico)
 			count = 1
+		#### ICO ####
 		count += 1
 		I.book = [] # need to be changed
 		if params['mobile']['activated'] == True:
