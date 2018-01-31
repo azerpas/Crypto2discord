@@ -4,7 +4,9 @@ Simple Python 2.7 script using both CoinMarketCap and Discord API to alert user 
 
 1. Input your default channel ID (Get it by activating Discord Dev Mode)
 2. Input your bot token, please follow the instructions on how to get it on Discord API Docs. 
+[Useful link: Adding a bot to your server, thanks to @jagrosh](https://github.com/jagrosh/MusicBot/wiki/Adding-Your-Bot-To-Your-Server) 
 3. Input your params. The two methods that use the bot are explained below. 
+4. Input your NEWSAPI token. [Get it here](https://newsapi.org/register) 
 
 
 #### As of 19/01/2018
